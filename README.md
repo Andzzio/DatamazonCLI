@@ -1,4 +1,4 @@
-# 🛒 DATAMAZON
+# 🛒 DATAMAZON CLI
 
 > Simulación simplificada de una plataforma de e-commerce (estilo Amazon) desarrollada como proyecto universitario para el curso **Estructura de Datos Avanzadas** — UPC.
 
@@ -34,7 +34,7 @@ Implementar las estructuras de datos vistas en el curso dentro de un sistema fun
 ## 🛠️ Stack
 
 - **Lenguaje:** C++
-- **UI:** Windows Forms (WinForms / .NET)
+- **UI:** CLI
 - **IDE:** Visual Studio
 
 ---
