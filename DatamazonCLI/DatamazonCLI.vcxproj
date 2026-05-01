@@ -129,6 +129,18 @@
   <ItemGroup>
     <ClCompile Include="DatamazonCLI.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Client.h" />
+    <ClInclude Include="DoubleList.h" />
+    <ClInclude Include="Entity.h" />
+    <ClInclude Include="MenuAdmin.h" />
+    <ClInclude Include="MenuClient.h" />
+    <ClInclude Include="Node.h" />
+    <ClInclude Include="Person.h" />
+    <ClInclude Include="Product.h" />
+    <ClInclude Include="Queue.h" />
+    <ClInclude Include="Stack.h" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

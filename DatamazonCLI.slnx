@@ -3,5 +3,5 @@
     <Platform Name="x64" />
     <Platform Name="x86" />
   </Configurations>
-  <Project Path="DatamazonCLI/DatamazonCLI.vcxproj" />
+  <Project Path="DatamazonCLI/DatamazonCLI.vcxproj" Id="131b1885-4d5f-4f8a-b367-bd6b1de150d9" />
 </Solution>
