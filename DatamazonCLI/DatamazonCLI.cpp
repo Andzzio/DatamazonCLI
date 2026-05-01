@@ -4,6 +4,8 @@
 #include "MenuAdmin.h"
 using namespace std;
 
+// cuando sale warzone bro
+ 
 int main()
 {
 
