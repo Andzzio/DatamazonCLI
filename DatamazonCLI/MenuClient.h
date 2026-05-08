@@ -4,19 +4,26 @@
 #include "DoubleList.h"
 #include "Stack.h"
 #include "Product.h"
-
+#include "Queue.h"
+#include "Order.h"
 using namespace std;
 class MenuClient {
 private:
     Client* client;
     DoubleList<Product*>* products;  // lista de productos disponibles
     Stack<Product*>* cartHistory;    // historial del carrito con pila
+    Queue<Order*>* orderQueue;
+
+    int orderCounter;
+
 
 public:
-    MenuClient(Client* client, DoubleList<Product*>* products) {
+    MenuClient(Client* client, DoubleList<Product*>* products, Queue<Order*>* orderQueue) {
         this->client = client;
         this->products = products;
+        this->orderQueue = orderQueue;
         cartHistory = new Stack<Product*>();
+        orderCounter = 1;
     }
 
     void show() {
@@ -30,6 +37,8 @@ public:
             cout << "2. Buscar producto" << endl;
             cout << "3. Agregar al carrito" << endl;
             cout << "4. Ver historial del carrito" << endl;
+            cout << "5. Realizar pedido" << endl;
+            cout << "6. Ver mis pedidos en cola" << endl;
             cout << "0. Cerrar sesion" << endl;
             cout << "Elige una opcion: "; cin >> option;
             system("cls");
@@ -47,7 +56,13 @@ public:
             case 4:
                 cartHistory->show();
                 break;
+            case 5:
+                createOrder();
+                break;
+            case 6:
+                orderQueue->showAll();
             }
+
         } while (option != 0);
     }
 
@@ -85,5 +100,39 @@ private:
             current = current->next;
         }
         cout << "Producto no encontrado." << endl;
+    }
+    void createOrder() {
+        int id, quantity;
+        Order* order = new Order(orderCounter++, client->getId());
+
+        cout << "\n==== NUEVO PEDIDO ====" << endl;
+        char addMore = 's';
+        while (addMore == 's') {
+            cout << "ID del producto: "; cin >> id;
+            cout << "Cantidad: ";        cin >> quantity;
+
+            // buscar producto en la lista
+            Node<Product*>* current = products->head;
+            while (current != nullptr) {
+                if (current->value->getId() == id) {
+                    if (current->value->getStock() >= quantity) {
+                        order->addDetail(new OrderDetail(id, current->value, quantity));
+                        current->value->setStock(current->value->getStock() - quantity);
+                        cout << "Producto agregado al pedido!" << endl;
+                    }
+                    else {
+                        cout << "Stock insuficiente." << endl;
+                    }
+                    break;
+                }
+                current = current->next;
+            }
+
+            cout << "Agregar otro producto? (s/n): "; cin >> addMore;
+        }
+
+        orderQueue->enqueue(order);
+        cout << "Pedido realizado! Posicion en cola: "
+            << orderQueue->count() << endl;
     }
 };

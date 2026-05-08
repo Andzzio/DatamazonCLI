@@ -1,23 +1,21 @@
 #pragma once
 #include<iostream>
-#include<string>  
+#include<string>
 using namespace std;
 
-class Entity{
+class Entity {
 protected:
     int id;
     string creationDate;
 
 public:
     Entity() {
-        id = 0; 
+        id = 0;
         creationDate = "";
     }
-    Entity(int id) { 
-        this->id = id; 
+    Entity(int id) {
+        this->id = id;
     }
-
-
 
     int getId() { return id; }
     virtual void show() = 0;

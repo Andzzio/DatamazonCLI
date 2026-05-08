@@ -2,15 +2,24 @@
 #include "Entity.h"
 #include "DoubleList.h"
 #include "Product.h"
+#include "Queue.h"    
+#include "Order.h"      
+#include "Supplier.h"   
+#include <iostream>     
+#include <string>  
 
 class MenuAdmin
 {
 private:
-	DoubleList<Product*>* products;
+    DoubleList<Product*>* products;
+    Queue<Order*>* orderQueue;
+    DoubleList<Supplier*>* suppliers;
 public:
-	MenuAdmin(DoubleList<Product*>* products){
-		this->products = products;
-	}
+    MenuAdmin(DoubleList<Product*>* products, Queue<Order*>* orderQueue, DoubleList<Supplier*>* suppliers) {
+        this->products = products;
+        this->orderQueue = orderQueue;
+        this->suppliers = suppliers;
+    }
     void show() {
         int option;
         do {
@@ -22,6 +31,11 @@ public:
             cout << "3. Eliminar producto" << endl;
             cout << "4. Filtrar por categoria" << endl;
             cout << "5. Filtrar por precio maximo" << endl;
+            cout << "6. Ver cola de pedidos" << endl;
+            cout << "7. Procesar siguiente pedido" << endl;
+            cout << "8. Ver proveedores" << endl;
+            cout << "9. Agregar proveedor" << endl;
+            cout << "10. Buscar proveedor por categoria" << endl;
             cout << "0. Cerrar sesion" << endl;
             cout << "Elige una opcion: "; cin >> option;
             system("cls");
@@ -42,10 +56,59 @@ public:
             case 5:
                 filterByPrice();
                 break;
+            case 6:
+                orderQueue->showAll();
+                break;
+            case 7:
+                processNextOrder();
+                break;
+            case 8:
+                suppliers->showFrontToBack();
+                break;
+            case 9:
+                addSupplier();
+                break;
+            case 10:
+                filterSupplierByCategory();
+                break;
             }
         } while (option != 0);
     }
+    void addSupplier() {
+        int id;
+        string name, email, phone, country, category;
+        cout << "==== NUEVO PROVEEDOR ====" << endl;
+        cout << "ID: ";        cin >> id;
+        cout << "Nombre: ";    cin >> name;
+        cout << "Email: ";     cin >> email;
+        cout << "Telefono: ";  cin >> phone;
+        cout << "Pais: ";      cin >> country;
+        cout << "Categoria: "; cin >> category;
+        suppliers->addBack(new Supplier(id, name, email, phone, country, category));
+        cout << "Proveedor agregado correctamente!" << endl;
+    }
+    void filterSupplierByCategory() {
+        string category;
+        cout << "Ingrese categoria: "; cin >> category;
 
+
+        auto byCategory = [category](Supplier* s) {
+            return s->getProductCategory() == category;
+            };
+        cout << "\n==== PROVEEDORES EN CATEGORIA: " << category << " ====" << endl;
+        suppliers->filter(byCategory);
+    }
+    void processNextOrder() {
+        if (orderQueue->isEmpty()) {
+            cout << "No hay pedidos pendientes." << endl;
+            return;
+        }
+        cout << "Procesando pedido:" << endl;
+        orderQueue->peek()->show();
+        orderQueue->peek()->setStatus("procesando");
+        orderQueue->dequeue();
+        cout << "Pedido procesado y removido de la cola!" << endl;
+    }
     void addProduct() {
         int id, stock;
         string name, category;
@@ -85,7 +148,7 @@ public:
         products->filter(byPrice);
     }
 
-	~MenuAdmin() {}
+    ~MenuAdmin() {}
 
 
 

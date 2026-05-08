@@ -1,59 +1,104 @@
-
 #pragma once
 #include "Node.h"
+#include <iostream>
 using namespace std;
+
 template<typename T>
-class Stack
-{
+class Queue {
 private:
-	Node<T>* top;
+    Node<T>* front;
+    Node<T>* back;
 
 public:
-	Stack() {
-		top == nullptr;
-	}
+    Queue() { front = back = nullptr; }
 
-	void push(T value) {
-		Node<T>* newNode = new Node<T>(value);
-		newNode->next = top;
-		top = newNode;
-	}
-	void pop() {
+    // ─── MÉTODOS ORIGINALES ───────────────────────────────────────
 
-		if (top == nullptr) {
-			cout << "Stack vacio" << endl;
-			return;
-		}
-		Node<T>* temp = top;
-		top = temp->next;
-		delete temp;
-	}
-	T peek() {
-		if (top == nullptr) {
-			cout << "Stack vacio...";
-			return;
-		}
-		return top->value;
-	}
+    void enqueue(T value) {
+        Node<T>* newNode = new Node<T>(value);
+        if (back == nullptr) { front = back = newNode; return; }
+        back->next = newNode;
+        back = newNode;
+    }
 
-	bool isEmpty() {
-		return top == nullptr;
-	}
+    void dequeue() {
+        if (front == nullptr) { cout << "No hay pedidos en cola." << endl; return; }
+        Node<T>* temp = front;
+        front = front->next;
+        if (front == nullptr) back = nullptr;
+        delete temp;
+    }
 
-	void show() {
-		Node<T>* current = top;
-		cout << "Tope" << endl;
-		while (current != nullptr)
-		{
-			cout << "[" << current->value << "]" << endl;
-			current = current->next;
-		}
-		cout << "BOTTON" << endl;
-	}
+    T peek() {
+        if (front == nullptr) { cout << "No hay pedidos en cola." << endl; return T(); }
+        return front->value;
+    }
 
+    bool isEmpty() { return front == nullptr; }
 
-	~Stack() {}
+    void showAll() {
+        if (front == nullptr) { cout << "No hay pedidos en cola." << endl; return; }
+        Node<T>* current = front;
+        int pos = 1;
+        cout << "\n==== COLA DE PEDIDOS ====" << endl;
+        while (current != nullptr) {
+            cout << "Posicion #" << pos++ << ":" << endl;
+            current->value->show();
+            current = current->next;
+        }
+    }
 
+    int count() {
+        int total = 0;
+        Node<T>* current = front;
+        while (current != nullptr) { total++; current = current->next; }
+        return total;
+    }
 
+    // ─── MÉTODOS NUEVOS ───────────────────────────────────────────
 
+    // 1. countRecursive(node) — cuenta pedidos recursivamente — O(n)
+    int countRecursive(Node<T>* node) {
+        if (node == nullptr) return 0;
+        return 1 + countRecursive(node->next);
+    }
+
+    // 2. contains(id) — verifica si un pedido está en la cola — O(n)
+    bool contains(int id) {
+        Node<T>* current = front;
+        while (current != nullptr) {
+            if (current->value->getId() == id) return true;
+            current = current->next;
+        }
+        return false;
+    }
+
+    // 3. getTotalRevenue() — suma los totales de todos los pedidos — O(n)
+    double getTotalRevenue() {
+        double total = 0;
+        Node<T>* current = front;
+        while (current != nullptr) {
+            total += current->value->getTotal();
+            current = current->next;
+        }
+        return total;
+    }
+
+    // 4. filterByStatus(status) — muestra pedidos por estado — O(n) con lambda
+    template<typename Funcion>
+    void filter(Funcion condition) {
+        Node<T>* current = front;
+        while (current != nullptr) {
+            if (condition(current->value)) current->value->show();
+            current = current->next;
+        }
+    }
+
+    // 5. clearAll() — vacia toda la cola — O(n)
+    void clearAll() {
+        while (!isEmpty()) dequeue();
+        cout << "Cola vaciada." << endl;
+    }
+
+    ~Queue() {}
 };
