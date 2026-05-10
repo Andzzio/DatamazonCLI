@@ -6,11 +6,11 @@
 
 ## 👥 Integrantes
 
-| Nombre         | GitHub                                       |
-| -------------- | -------------------------------------------- |
-| André Sanchez  | [@Andzzio](https://github.com/Andzzio)       |
-| Leonardo Primo | [@xZoomL](https://github.com/xZoomL)         |
-| Josue Ochoa    | [@NoExisteXD](https://github.com/NoExisteXD) |
+| Nombre         | GitHub                                                 |
+| -------------- | ------------------------------------------------------ |
+| André Sanchez  | [@Andzzio](https://github.com/Andzzio)                 |
+| Leonardo Primo | [@xZoomL](https://github.com/xZoomL)                   |
+| Josue Ochoa    | [@ShahrukOchoa](https://github.com/shahrukhochoa8-oss) |
 
 ---
 
