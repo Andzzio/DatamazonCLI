@@ -5,6 +5,7 @@
 #include "OrderDetail.h"
 #include "DoubleList.h"
 #include "Payment.h"
+#include "ConsoleUI.h"
 using namespace std;
 
 class Order : public Entity {
@@ -39,17 +40,19 @@ public:
     }
 
     void show() override {
-        cout << "#################################" << endl;
-        cout << "  Pedido ID : " << id << endl;
-        cout << "  Cliente ID: " << clientId << endl;
-        cout << "  Estado    : " << status << endl;
-        cout << "  Detalle   :" << endl;
+        ConsoleUI::printCardHeader("PEDIDO ID: " + to_string(id));
+        ConsoleUI::printCardField("Cliente ID", to_string(clientId));
+        ConsoleUI::printCardField("Estado", status);
+        ConsoleUI::printCardField("Total", ConsoleUI::formatPrice(total));
+        ConsoleUI::printCardFooter();
+        
+        cout << ConsoleUI::CYAN << "\n[ Detalle del Pedido ]" << ConsoleUI::RESET << endl;
         details->showFrontToBack();
-        cout << "  Total     : S/." << total << endl;
+
         if (payment != nullptr) {
+            cout << ConsoleUI::CYAN << "\n[ Info de Pago ]" << ConsoleUI::RESET << endl;
             payment->show();
         }
-        cout << "##################################" << endl;
     }
 
     ~Order() {}

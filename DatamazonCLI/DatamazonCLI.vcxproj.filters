@@ -44,6 +44,9 @@
     <ClInclude Include="Client.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
+    <ClInclude Include="ConsoleUI.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
     <ClInclude Include="Coupon.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>

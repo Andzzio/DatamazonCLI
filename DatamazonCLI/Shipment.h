@@ -1,6 +1,7 @@
 #pragma once
 #include <iostream>
 #include <string>
+#include "ConsoleUI.h"
 
 using namespace std;
 
@@ -22,11 +23,11 @@ public:
     string getCourier() { return courier; }
 
     void show() {
-        cout << "--- GUIA DE ENVIO ---" << endl;
-        cout << "Tracking: " << trackingCode << endl;
-        cout << "Destino: " << destination << endl;
-        cout << "Courier: " << courier << endl;
-        cout << "---------------------" << endl;
+        ConsoleUI::printCardHeader("GUIA DE ENVIO");
+        ConsoleUI::printCardField("Tracking", trackingCode);
+        ConsoleUI::printCardField("Destino", destination);
+        ConsoleUI::printCardField("Courier", courier);
+        ConsoleUI::printCardFooter();
     }
 
     ~Shipment() {}

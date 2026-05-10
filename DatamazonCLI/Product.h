@@ -1,5 +1,6 @@
 #pragma once
 #include "Entity.h"
+#include "ConsoleUI.h"
 
 class Product :public Entity
 {
@@ -27,8 +28,7 @@ public:
 	void   setStock(int s) { stock = s; }
 
 	void show() override {
-		cout << "Producto: " << name << " | Precio: S/." << price
-			<< " | Stock: " << stock << " Id: " << id << endl;
+		ConsoleUI::printTableRow5(to_string(id), 5, name, 20, category, 15, ConsoleUI::formatPrice(price), 15, to_string(stock), 8);
 	}
 
 	~Product() {};

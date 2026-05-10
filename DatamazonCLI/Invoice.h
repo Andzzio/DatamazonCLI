@@ -1,6 +1,7 @@
 #pragma once
 #include <iostream>
 #include <string>
+#include "ConsoleUI.h"
 
 using namespace std;
 
@@ -28,12 +29,13 @@ public:
     double getTotalAmount() { return totalAmount; }
 
     void show() {
-        cout << "--- BOLETA DE VENTA ---" << endl;
-        cout << "Boleta Nro: " << invoiceId << " | Pedido Relacionado: " << orderId << endl;
-        cout << "Fecha: " << date << endl;
-        cout << "Impuestos (IGV 18%): S/." << totalTax << endl;
-        cout << "Total General: S/." << totalAmount << endl;
-        cout << "-----------------------" << endl;
+        ConsoleUI::printCardHeader("BOLETA DE VENTA");
+        ConsoleUI::printCardField("Boleta Nro", to_string(invoiceId));
+        ConsoleUI::printCardField("Pedido", to_string(orderId));
+        ConsoleUI::printCardField("Fecha", date);
+        ConsoleUI::printCardField("Impuestos (18%)", ConsoleUI::formatPrice(totalTax));
+        ConsoleUI::printCardField("Total General", ConsoleUI::formatPrice(totalAmount));
+        ConsoleUI::printCardFooter();
     }
 
     ~Invoice() {}

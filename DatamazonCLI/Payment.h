@@ -1,6 +1,7 @@
 #pragma once
 #include <iostream>
 #include <string>
+#include "ConsoleUI.h"
 
 using namespace std;
 
@@ -22,7 +23,9 @@ public:
     double getAmount() { return amount; }
 
     void show() {
-        cout << "Pago ID: " << paymentId << " | Metodo: " << method << " | Monto: S/." << amount << endl;
+        ConsoleUI::printCardField("Pago ID", to_string(paymentId));
+        ConsoleUI::printCardField("Metodo", method);
+        ConsoleUI::printCardField("Monto", ConsoleUI::formatPrice(amount));
     }
 
     ~Payment() {}

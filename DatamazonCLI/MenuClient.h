@@ -10,6 +10,10 @@
 #include "Stack.h"
 #include "InputValidator.h"
 #include <iostream>
+#include <string>
+#include <algorithm>
+#include <cctype>
+#include <conio.h>
 using namespace std;
 class MenuClient {
 private:
@@ -35,17 +39,15 @@ public:
   void show() {
     int option;
     do {
-      cout << "\n================================" << endl;
-      cout << "#     BIENVENIDO, " << client->getName() << endl;
-      cout << "#     AMAZONAS - CLIENTE        #" << endl;
-      cout << "=================================" << endl;
-      cout << "1. Ver productos" << endl;
-      cout << "2. Buscar producto" << endl;
-      cout << "3. Agregar al carrito" << endl;
-      cout << "4. Ver historial del carrito" << endl;
-      cout << "5. Realizar pedido" << endl;
-      cout << "6. Ver mis pedidos en cola" << endl;
-      cout << "0. Cerrar sesion" << endl;
+      system("cls");
+      ConsoleUI::printHeader("BIENVENIDO, " + client->getName());
+      ConsoleUI::printMenuOption(1, "Ver productos");
+      ConsoleUI::printMenuOption(2, "Buscar producto");
+      ConsoleUI::printMenuOption(3, "Agregar al carrito");
+      ConsoleUI::printMenuOption(4, "Ver historial del carrito");
+      ConsoleUI::printMenuOption(5, "Realizar pedido");
+      ConsoleUI::printMenuOption(6, "Ver mis pedidos en cola");
+      ConsoleUI::printMenuOption(0, "Cerrar sesion");
       option = InputValidator::readNumeric<int>("Elige una opcion: ");
       system("cls");
 
@@ -60,7 +62,10 @@ public:
         addToCart();
         break;
       case 4:
+        ConsoleUI::printHeader("HISTORIAL DE CARRITO");
+        ConsoleUI::printProductTableHeader();
         cartHistory->show();
+        ConsoleUI::printProductTableFooter();
         break;
       case 5:
         createOrder();
@@ -68,24 +73,60 @@ public:
       case 6:
         orderQueue->showAll();
       }
-
+      
+      if (option != 0) {
+        cout << "\n";
+        system("pause");
+      }
     } while (option != 0);
   }
 
 private:
   void showProducts() {
-    cout << "\n==== PRODUCTOS DISPONIBLES ====" << endl;
+    ConsoleUI::printHeader("PRODUCTOS DISPONIBLES");
+    ConsoleUI::printProductTableHeader();
     auto hasStock = [](Product *p) { return p->getStock() > 0; };
     products->filter(hasStock);
+    ConsoleUI::printProductTableFooter();
   }
 
   void searchProduct() {
-    string name;
-    cout << "Ingrese nombre del producto: ";
-    cin >> name;
-    auto byName = [name](Product *p) { return p->getName() == name; };
-    cout << "\n==== RESULTADO ====" << endl;
-    products->filter(byName);
+    string query = "";
+    char ch;
+
+    while (true) {
+        system("cls");
+        ConsoleUI::printHeader("BUSCAR PRODUCTO");
+        cout << ConsoleUI::YELLOW << " [?] " << ConsoleUI::RESET 
+             << "Buscar producto (ENTER para salir): " 
+             << ConsoleUI::WHITE << ConsoleUI::BOLD << query << "_" << ConsoleUI::RESET << endl << endl;
+
+        string lowerQuery = query;
+        transform(lowerQuery.begin(), lowerQuery.end(), lowerQuery.begin(), ::tolower);
+
+        auto byPartialName = [lowerQuery](Product *p) { 
+            if (lowerQuery.empty()) return true;
+            string pName = p->getName();
+            transform(pName.begin(), pName.end(), pName.begin(), ::tolower);
+            return pName.find(lowerQuery) != string::npos; 
+        };
+
+        ConsoleUI::printProductTableHeader();
+        products->filter(byPartialName);
+        ConsoleUI::printProductTableFooter();
+
+        ch = _getch();
+
+        if (ch == 13) { 
+            break;
+        } else if (ch == 8) { 
+            if (!query.empty()) {
+                query.pop_back();
+            }
+        } else if (ch >= 32 && ch <= 126) { 
+            query += ch;
+        }
+    }
   }
 
   void addToCart() {
@@ -95,7 +136,7 @@ private:
     while (current != nullptr) {
       if (current->value->getId() == id) {
         cartHistory->push(current->value);
-        cout << "Producto agregado al carrito!" << endl;
+        ConsoleUI::printSuccess("Producto agregado al carrito!");
         return;
       }
       current = current->next;

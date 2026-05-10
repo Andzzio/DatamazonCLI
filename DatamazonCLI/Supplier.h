@@ -1,5 +1,6 @@
 #pragma once
 #include "Entity.h"
+#include "ConsoleUI.h"
 #include <string>
 using namespace std;
 
@@ -29,13 +30,7 @@ public:
     string getProductCategory() { return productCategory; }
 
     void show() override {
-        cout << "--------------------------" << endl;
-        cout << "  Proveedor : " << name << endl;
-        cout << "  Email     : " << email << endl;
-        cout << "  Telefono  : " << phone << endl;
-        cout << "  Pais      : " << country << endl;
-        cout << "  Categoria : " << productCategory << endl;
-        cout << "-------------------------" << endl;
+        ConsoleUI::printTableRow5(to_string(id), 5, name, 20, email, 25, country, 12, productCategory, 12);
     }
 
     ~Supplier() {}

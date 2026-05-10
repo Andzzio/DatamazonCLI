@@ -16,29 +16,17 @@
 
 using namespace std;
 
-void setColor(int color) {
-  SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), color);
-}
-
 void printBanner() {
-  setColor(14);
+  cout << ConsoleUI::MAGENTA << ConsoleUI::BOLD << endl;
   cout << " ____   _  _____  _     __  __     _     _____  ___  _   _ " << endl;
-  cout << "|  _ \\ / \\|_   _|/ \\   |  \\/  |   / \\   |__  / / _ \\| \\ | |"
-       << endl;
-  cout << "| | | / _ \\ | | / _ \\  | |\\/| |  / _ \\    / / | | | |  \\| |"
-       << endl;
-  cout << "| |_| / ___ \\| |/ ___ \\ | |  | | / ___ \\  / /_ | |_| | |\\  |"
-       << endl;
-  cout << "|____/_/   \\_\\_/_/   \\_\\|_|  |_|/_/   \\_\\/____| \\___/|_| \\_|"
-       << endl;
+  cout << "|  _ \\ / \\|_   _|/ \\   |  \\/  |   / \\   |__  / / _ \\| \\ | |" << endl;
+  cout << "| | | / _ \\ | | / _ \\  | |\\/| |  / _ \\    / / | | | |  \\| |" << endl;
+  cout << "| |_| / ___ \\| |/ ___ \\ | |  | | / ___ \\  / /_ | |_| | |\\  |" << endl;
+  cout << "|____/_/   \\_\\_/_/   \\_\\|_|  |_|/_/   \\_\\/____| \\___/|_| \\_|" << endl;
+  cout << ConsoleUI::RESET << endl;
 
-  setColor(15);
-  cout << "------------------------------------------------------------"
-       << endl;
-  cout << "      Sistema de Gestion de Inventarios y Marketplace" << endl;
-  cout << "       Grupo: 9 | Estructuras de Datos 2026-1" << endl;
-  cout << "------------------------------------------------------------"
-       << endl;
+  ConsoleUI::printHeader("Sistema de Gestion de Inventarios y Marketplace");
+  cout << ConsoleUI::CYAN << "           Grupo: 9 | Estructuras de Datos 2026-1" << ConsoleUI::RESET << endl;
 }
 
 int main() {
@@ -111,22 +99,14 @@ int main() {
     system("cls");
     printBanner();
 
-    setColor(14);
-    cout << "\n  ========================================" << endl;
-    setColor(11);
-    cout << "  [1] Ingresar como Cliente" << endl;
-    cout << "  [2] Ingresar como Administrador" << endl;
-    setColor(13);
-    cout << "  [3] Ver categorias disponibles" << endl;
-    cout << "  [4] Ver almacenes" << endl;
-    cout << "  [5] Ver resenas de productos" << endl;
-    cout << "  [6] Ver productos premium (S/.>500)" << endl;
-    cout << "  [7] Ver clientes prime" << endl;
-    setColor(12);
-    cout << "  [0] Salir" << endl;
-    setColor(14);
-    cout << "  ========================================" << endl;
-    setColor(15);
+    ConsoleUI::printMenuOption(1, "Ingresar como Cliente");
+    ConsoleUI::printMenuOption(2, "Ingresar como Administrador");
+    ConsoleUI::printMenuOption(3, "Ver categorias disponibles");
+    ConsoleUI::printMenuOption(4, "Ver almacenes");
+    ConsoleUI::printMenuOption(5, "Ver resenas de productos");
+    ConsoleUI::printMenuOption(6, "Ver productos premium (S/.>500)");
+    ConsoleUI::printMenuOption(7, "Ver clientes prime");
+    ConsoleUI::printMenuOption(0, "Salir");
 
     option = InputValidator::readNumeric<int>("\n  Seleccione una opcion: ");
 
@@ -134,9 +114,7 @@ int main() {
 
     case 1: {
       system("cls");
-      setColor(10);
-      cout << "==== REGISTRO / LOGIN DE CLIENTE ====" << endl;
-      setColor(15);
+      ConsoleUI::printHeader("REGISTRO / LOGIN DE CLIENTE");
 
       string name, email, phone, address, membership;
       int id;
@@ -167,25 +145,19 @@ int main() {
     case 2: {
       system("cls");
       string pass;
-      setColor(12);
-      cout << "==== ACCESO ADMINISTRADOR ====" << endl;
-      setColor(15);
+      ConsoleUI::printHeader("ACCESO ADMINISTRADOR");
       cout << "Contrasena: ";
       cin >> pass;
 
       if (adminUser->authenticate(pass)) {
-        setColor(10);
-        cout << "Bienvenido, " << adminUser->getName() << "!" << endl;
-        setColor(15);
+        ConsoleUI::printSuccess("Bienvenido, " + adminUser->getName() + "!");
         MenuAdmin menuAdmin(products, orderQueue, suppliers);
         menuAdmin.show();
 
         FileManager::saveProducts(products);
         FileManager::saveSuppliers(suppliers);
       } else {
-        setColor(12);
-        cout << "Contrasena incorrecta." << endl;
-        setColor(15);
+        ConsoleUI::printError("Contrasena incorrecta.");
         system("pause");
       }
       break;
@@ -193,9 +165,7 @@ int main() {
 
     case 3: {
       system("cls");
-      setColor(13);
-      cout << "==== CATEGORIAS DISPONIBLES ====" << endl;
-      setColor(15);
+      ConsoleUI::printHeader("CATEGORIAS DISPONIBLES");
 
       for (auto it = categories->begin(); it != categories->end(); ++it) {
         (*it)->show();
@@ -207,9 +177,7 @@ int main() {
 
     case 4: {
       system("cls");
-      setColor(13);
-      cout << "==== ALMACENES ====" << endl;
-      setColor(15);
+      ConsoleUI::printHeader("ALMACENES");
       warehouses->showFrontToBack();
 
       cout << "\n-- Almacenes con espacio disponible --" << endl;
@@ -220,9 +188,7 @@ int main() {
 
     case 5: {
       system("cls");
-      setColor(13);
-      cout << "==== RESENAS DE PRODUCTOS ====" << endl;
-      setColor(15);
+      ConsoleUI::printHeader("RESENAS DE PRODUCTOS");
 
       if (reviews->count() == 0) {
         reviews->addBack(new Review(1, 1, 1, 5, "Excelente laptop!"));
@@ -244,19 +210,17 @@ int main() {
 
     case 6: {
       system("cls");
-      setColor(14);
-      cout << "==== PRODUCTOS PREMIUM (S/.>500) ====" << endl;
-      setColor(15);
+      ConsoleUI::printHeader("PRODUCTOS PREMIUM (S/.>500)");
+      ConsoleUI::printProductTableHeader();
       products->filter(isPremium);
+      ConsoleUI::printProductTableFooter();
       system("pause");
       break;
     }
 
     case 7: {
       system("cls");
-      setColor(11);
-      cout << "==== CLIENTES CON MEMBRESIA PRIME ====" << endl;
-      setColor(15);
+      ConsoleUI::printHeader("CLIENTES CON MEMBRESIA PRIME");
       if (clients->count() == 0) {
         cout << "No hay clientes registrados aun." << endl;
       } else {
@@ -270,10 +234,8 @@ int main() {
       FileManager::saveProducts(products);
       FileManager::saveSuppliers(suppliers);
       FileManager::saveClients(clients);
-      setColor(14);
-      cout << "\n  Gracias por usar Amazonia UPC Store!" << endl;
-      cout << "  Datos guardados correctamente." << endl;
-      setColor(15);
+      ConsoleUI::printSuccess("Gracias por usar Amazonia UPC Store!");
+      ConsoleUI::printSuccess("Datos guardados correctamente.");
       break;
     }
 

@@ -26,26 +26,27 @@ public:
     void show() {
         int option;
         do {
-            cout << "\n==============================" << endl;
-            cout << "=   AMAZONIA - ADMINISTRADOR   =" << endl;
-            cout << "===============================" << endl;
-            cout << "1. Ver todos los productos" << endl;
-            cout << "2. Agregar producto" << endl;
-            cout << "3. Eliminar producto" << endl;
-            cout << "4. Filtrar por categoria" << endl;
-            cout << "5. Filtrar por precio maximo" << endl;
-            cout << "6. Ver cola de pedidos" << endl;
-            cout << "7. Procesar siguiente pedido" << endl;
-            cout << "8. Ver proveedores" << endl;
-            cout << "9. Agregar proveedor" << endl;
-            cout << "10. Buscar proveedor por categoria" << endl;
-            cout << "0. Cerrar sesion" << endl;
+            system("cls");
+            ConsoleUI::printHeader("AMAZONIA - ADMINISTRADOR");
+            ConsoleUI::printMenuOption(1, "Ver todos los productos");
+            ConsoleUI::printMenuOption(2, "Agregar producto");
+            ConsoleUI::printMenuOption(3, "Eliminar producto");
+            ConsoleUI::printMenuOption(4, "Filtrar por categoria");
+            ConsoleUI::printMenuOption(5, "Filtrar por precio maximo");
+            ConsoleUI::printMenuOption(6, "Ver cola de pedidos");
+            ConsoleUI::printMenuOption(7, "Procesar siguiente pedido");
+            ConsoleUI::printMenuOption(8, "Ver proveedores");
+            ConsoleUI::printMenuOption(9, "Agregar proveedor");
+            ConsoleUI::printMenuOption(10, "Buscar proveedor por categoria");
+            ConsoleUI::printMenuOption(0, "Cerrar sesion");
             option = InputValidator::readNumeric<int>("Elige una opcion: ");
             system("cls");
 
             switch (option) {
             case 1:
+                ConsoleUI::printProductTableHeader();
                 products->showFrontToBack();
+                ConsoleUI::printProductTableFooter();
                 break;
             case 2:
                 addProduct();
@@ -66,7 +67,10 @@ public:
                 processNextOrder();
                 break;
             case 8:
+                ConsoleUI::printHeader("TODOS LOS PROVEEDORES");
+                ConsoleUI::printSupplierTableHeader();
                 suppliers->showFrontToBack();
+                ConsoleUI::printSupplierTableFooter();
                 break;
             case 9:
                 addSupplier();
@@ -75,12 +79,17 @@ public:
                 filterSupplierByCategory();
                 break;
             }
+            
+            if (option != 0) {
+                cout << "\n";
+                system("pause");
+            }
         } while (option != 0);
     }
     void addSupplier() {
         int id;
         string name, email, phone, country, category;
-        cout << "==== NUEVO PROVEEDOR ====" << endl;
+        ConsoleUI::printHeader("NUEVO PROVEEDOR");
         id = InputValidator::readNumeric<int>("ID: ");
         cout << "Nombre: ";    cin >> name;
         cout << "Email: ";     cin >> email;
@@ -88,7 +97,7 @@ public:
         cout << "Pais: ";      cin >> country;
         cout << "Categoria: "; cin >> category;
         suppliers->addBack(new Supplier(id, name, email, phone, country, category));
-        cout << "Proveedor agregado correctamente!" << endl;
+        ConsoleUI::printSuccess("Proveedor agregado correctamente!");
     }
     void filterSupplierByCategory() {
         string category;
@@ -97,8 +106,10 @@ public:
         auto byCategory = [category](Supplier* s) {
             return s->getProductCategory() == category;
             };
-        cout << "\n==== PROVEEDORES EN CATEGORIA: " << category << " ====" << endl;
+        ConsoleUI::printHeader("PROVEEDORES EN CATEGORIA: " + category);
+        ConsoleUI::printSupplierTableHeader();
         suppliers->filter(byCategory);
+        ConsoleUI::printSupplierTableFooter();
     }
     void processNextOrder() {
         if (orderQueue->isEmpty()) {
@@ -130,7 +141,7 @@ public:
         price = InputValidator::readNumeric<double>("Precio: ");
         stock = InputValidator::readNumeric<int>("Stock: ");
         products->addBack(new Product(id, name, category, price, stock));
-        cout << "Producto agregado correctamente!" << endl;
+        ConsoleUI::printSuccess("Producto agregado correctamente!");
     }
     void deleteProduct() {
         int id;
@@ -144,8 +155,10 @@ public:
         auto byCategory = [category](Product* p) {
             return p->getCategory() == category;
             };
-        cout << "\n==== PRODUCTOS EN CATEGORIA: " << category << " ====" << endl;
+        ConsoleUI::printHeader("PRODUCTOS EN CATEGORIA: " + category);
+        ConsoleUI::printProductTableHeader();
         products->filter(byCategory);
+        ConsoleUI::printProductTableFooter();
     }
     void filterByPrice() {
         double maxPrice;
@@ -153,8 +166,10 @@ public:
         auto byPrice = [maxPrice](Product* p) {
             return p->getPrice() <= maxPrice;
             };
-        cout << "\n==== PRODUCTOS HASTA S/." << maxPrice << " ====" << endl;
+        ConsoleUI::printHeader("PRODUCTOS HASTA S/." + ConsoleUI::formatPrice(maxPrice));
+        ConsoleUI::printProductTableHeader();
         products->filter(byPrice);
+        ConsoleUI::printProductTableFooter();
     }
 
     ~MenuAdmin() {}
