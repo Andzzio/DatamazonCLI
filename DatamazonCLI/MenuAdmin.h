@@ -4,7 +4,10 @@
 #include "Product.h"
 #include "Queue.h"    
 #include "Order.h"      
-#include "Supplier.h"   
+#include "Supplier.h"
+#include "Invoice.h"
+#include "Shipment.h"
+#include "InputValidator.h"
 #include <iostream>     
 #include <string>  
 
@@ -37,7 +40,7 @@ public:
             cout << "9. Agregar proveedor" << endl;
             cout << "10. Buscar proveedor por categoria" << endl;
             cout << "0. Cerrar sesion" << endl;
-            cout << "Elige una opcion: "; cin >> option;
+            option = InputValidator::readNumeric<int>("Elige una opcion: ");
             system("cls");
 
             switch (option) {
@@ -78,7 +81,7 @@ public:
         int id;
         string name, email, phone, country, category;
         cout << "==== NUEVO PROVEEDOR ====" << endl;
-        cout << "ID: ";        cin >> id;
+        id = InputValidator::readNumeric<int>("ID: ");
         cout << "Nombre: ";    cin >> name;
         cout << "Email: ";     cin >> email;
         cout << "Telefono: ";  cin >> phone;
@@ -90,7 +93,6 @@ public:
     void filterSupplierByCategory() {
         string category;
         cout << "Ingrese categoria: "; cin >> category;
-
 
         auto byCategory = [category](Supplier* s) {
             return s->getProductCategory() == category;
@@ -104,33 +106,41 @@ public:
             return;
         }
         cout << "Procesando pedido:" << endl;
-        orderQueue->peek()->show();
-        orderQueue->peek()->setStatus("procesando");
+        Order* orderToProcess = orderQueue->peek();
+        orderToProcess->show();
+        orderToProcess->setStatus("procesando");
         orderQueue->dequeue();
-        cout << "Pedido procesado y removido de la cola!" << endl;
+        
+        double totalTax = orderToProcess->getTotal() * 0.18;
+        Invoice* invoice = new Invoice(orderToProcess->getId() * 1000, orderToProcess->getId(), "10-05-2026", totalTax, orderToProcess->getTotal() + totalTax);
+        invoice->show();
+
+        Shipment* shipment = new Shipment("TRK-" + to_string(orderToProcess->getId()), "Direccion Registrada del Cliente", "Olva Courier");
+        shipment->show();
+
+        cout << "Pedido procesado, facturado y enviado!" << endl;
     }
     void addProduct() {
         int id, stock;
         string name, category;
         double price;
-        cout << "ID: ";       cin >> id;
+        id = InputValidator::readNumeric<int>("ID: ");
         cout << "Nombre: ";   cin >> name;
         cout << "Categoria: "; cin >> category;
-        cout << "Precio: ";   cin >> price;
-        cout << "Stock: ";    cin >> stock;
+        price = InputValidator::readNumeric<double>("Precio: ");
+        stock = InputValidator::readNumeric<int>("Stock: ");
         products->addBack(new Product(id, name, category, price, stock));
         cout << "Producto agregado correctamente!" << endl;
     }
     void deleteProduct() {
         int id;
-        cout << "ID del producto a eliminar: "; cin >> id;
+        id = InputValidator::readNumeric<int>("ID del producto a eliminar: ");
         products->deleteById(id);
     }
 
     void filterByCategory() {
         string category;
         cout << "Ingrese categoria: "; cin >> category;
-        // lambda filtrar por categoria
         auto byCategory = [category](Product* p) {
             return p->getCategory() == category;
             };
@@ -139,8 +149,7 @@ public:
     }
     void filterByPrice() {
         double maxPrice;
-        cout << "Ingrese precio maximo: "; cin >> maxPrice;
-        // lambda filtrar por precio
+        maxPrice = InputValidator::readNumeric<double>("Ingrese precio maximo: ");
         auto byPrice = [maxPrice](Product* p) {
             return p->getPrice() <= maxPrice;
             };
@@ -149,8 +158,4 @@ public:
     }
 
     ~MenuAdmin() {}
-
-
-
 };
-

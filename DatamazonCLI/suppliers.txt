@@ -1,0 +1,3 @@
+1,TechCorp,tech@corp.com,999-111,USA,Tecnologia
+2,FashionPro,info@fashion.com,999-222,Peru,Ropa
+3,LibrosMundo,libros@mundo.com,999-333,Spain,Educacion

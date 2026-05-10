@@ -1,5 +1,7 @@
 #pragma once
 #include "Node.h"
+#include <iostream>
+using namespace std;
 template<typename T>
 class DoubleList
 {
@@ -7,11 +9,38 @@ public:
     Node<T>* head;
     Node<T>* tail;
 
+    class Iterator {
+    private:
+        Node<T>* current;
+    public:
+        Iterator(Node<T>* node) : current(node) {}
+        
+        T& operator*() { return current->value; }
+        
+        Iterator& operator++() {
+            if (current != nullptr) {
+                current = current->next;
+            }
+            return *this;
+        }
+
+        Iterator& operator--() {
+            if (current != nullptr) {
+                current = current->previous;
+            }
+            return *this;
+        }
+        
+        bool operator!=(const Iterator& other) const { return current != other.current; }
+        bool operator==(const Iterator& other) const { return current == other.current; }
+    };
+
     DoubleList() {
         head = tail = nullptr;
     }
 
-    // ─── MÉTODOS ORIGINALES ───────────────────────────────────────
+    Iterator begin() { return Iterator(head); }
+    Iterator end() { return Iterator(nullptr); }
 
     void addBack(T value) {
         Node<T>* newNode = new Node<T>(value);
@@ -72,9 +101,6 @@ public:
         cout << "Elemento no encontrado." << endl;
     }
 
-    // ─── MÉTODOS NUEVOS ───────────────────────────────────────────
-
-    // 1. count() — cuenta cuántos nodos hay — O(n)
     int count() {
         int total = 0;
         Node<T>* current = head;
@@ -82,7 +108,6 @@ public:
         return total;
     }
 
-    // 2. contains(id) — verifica si existe un elemento con ese id — O(n)
     bool contains(int id) {
         Node<T>* current = head;
         while (current != nullptr) {
@@ -92,7 +117,6 @@ public:
         return false;
     }
 
-    // 3. getById(id) — retorna el elemento con ese id — O(n)
     T getById(int id) {
         Node<T>* current = head;
         while (current != nullptr) {
@@ -102,7 +126,6 @@ public:
         return nullptr;
     }
 
-    // 4. showBackToFront() — muestra la lista al revés — O(n)
     void showBackToFront() {
         if (tail == nullptr) { cout << "Lista vacia." << endl; return; }
         Node<T>* current = tail;
@@ -113,7 +136,6 @@ public:
         }
     }
 
-    // 5. sortByPrice() — Bubble Sort por precio ascendente — O(n²)
     void sortByPrice() {
         if (head == nullptr) return;
         bool swapped;
@@ -133,7 +155,6 @@ public:
         cout << "Productos ordenados por precio (menor a mayor)." << endl;
     }
 
-    // 6. sortByName() — Bubble Sort por nombre ascendente — O(n²)
     void sortByName() {
         if (head == nullptr) return;
         bool swapped;
@@ -153,23 +174,19 @@ public:
         cout << "Lista ordenada alfabeticamente." << endl;
     }
 
-    // 7. mergeSort() — Merge Sort recursivo por precio — O(n log n)
     void mergeSort() {
         head = mergeSortHelper(head);
-        // recalcular tail
         Node<T>* current = head;
         while (current && current->next) current = current->next;
         tail = current;
         cout << "Productos ordenados con Merge Sort (precio asc)." << endl;
     }
 
-    // 8. countRecursive(node) — cuenta nodos de forma recursiva — O(n)
     int countRecursive(Node<T>* node) {
         if (node == nullptr) return 0;
         return 1 + countRecursive(node->next);
     }
 
-    // 9. searchRecursive(node, id) — busca un nodo recursivamente — O(n)
     T searchRecursive(Node<T>* node, int id) {
         if (node == nullptr) return nullptr;
         if (node->value->getId() == id) return node->value;
@@ -177,8 +194,6 @@ public:
     }
 
 private:
-    // ─── HELPERS PARA MERGE SORT ─────────────────────────────────
-
     Node<T>* mergeSortHelper(Node<T>* node) {
         if (node == nullptr || node->next == nullptr) return node;
         Node<T>* mid = getMiddle(node);

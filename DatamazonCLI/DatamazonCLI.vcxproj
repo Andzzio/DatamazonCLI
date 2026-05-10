@@ -133,7 +133,13 @@
     <ClInclude Include="Admin.h" />
     <ClInclude Include="Category.h" />
     <ClInclude Include="Client.h" />
+    <ClInclude Include="Coupon.h" />
     <ClInclude Include="DoubleList.h" />
+    <ClInclude Include="InputValidator.h" />
+    <ClInclude Include="Invoice.h" />
+    <ClInclude Include="Payment.h" />
+    <ClInclude Include="Shipment.h" />
+    <ClInclude Include="SimpleList.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="FileManager.h" />
     <ClInclude Include="MenuAdmin.h" />

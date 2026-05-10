@@ -10,8 +10,6 @@ using namespace std;
 class FileManager {
 public:
 
-    // ─── PRODUCTOS ────────────────────────────────────────────────
-
     static void saveProducts(DoubleList<Product*>* products, string filename = "products.txt") {
         ofstream file(filename);
         if (!file.is_open()) { cout << "Error al abrir archivo." << endl; return; }
@@ -46,8 +44,6 @@ public:
         cout << "Productos cargados desde " << filename << endl;
     }
 
-    // ─── CLIENTES ─────────────────────────────────────────────────
-
     static void saveClients(DoubleList<Client*>* clients, string filename = "clients.txt") {
         ofstream file(filename);
         if (!file.is_open()) { cout << "Error al abrir archivo." << endl; return; }
@@ -81,8 +77,6 @@ public:
         file.close();
         cout << "Clientes cargados desde " << filename << endl;
     }
-
-    // ─── PROVEEDORES ──────────────────────────────────────────────
 
     static void saveSuppliers(DoubleList<Supplier*>* suppliers, string filename = "suppliers.txt") {
         ofstream file(filename);

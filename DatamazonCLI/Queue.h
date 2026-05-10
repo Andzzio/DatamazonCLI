@@ -12,8 +12,6 @@ private:
 public:
     Queue() { front = back = nullptr; }
 
-    // ─── MÉTODOS ORIGINALES ───────────────────────────────────────
-
     void enqueue(T value) {
         Node<T>* newNode = new Node<T>(value);
         if (back == nullptr) { front = back = newNode; return; }
@@ -55,15 +53,11 @@ public:
         return total;
     }
 
-    // ─── MÉTODOS NUEVOS ───────────────────────────────────────────
-
-    // 1. countRecursive(node) — cuenta pedidos recursivamente — O(n)
     int countRecursive(Node<T>* node) {
         if (node == nullptr) return 0;
         return 1 + countRecursive(node->next);
     }
 
-    // 2. contains(id) — verifica si un pedido está en la cola — O(n)
     bool contains(int id) {
         Node<T>* current = front;
         while (current != nullptr) {
@@ -73,7 +67,6 @@ public:
         return false;
     }
 
-    // 3. getTotalRevenue() — suma los totales de todos los pedidos — O(n)
     double getTotalRevenue() {
         double total = 0;
         Node<T>* current = front;
@@ -84,7 +77,6 @@ public:
         return total;
     }
 
-    // 4. filterByStatus(status) — muestra pedidos por estado — O(n) con lambda
     template<typename Funcion>
     void filter(Funcion condition) {
         Node<T>* current = front;
@@ -94,7 +86,6 @@ public:
         }
     }
 
-    // 5. clearAll() — vacia toda la cola — O(n)
     void clearAll() {
         while (!isEmpty()) dequeue();
         cout << "Cola vaciada." << endl;

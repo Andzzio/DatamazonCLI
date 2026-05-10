@@ -1,0 +1,7 @@
+1,Laptop,Tecnologia,2999.99,9
+2,Auricular,Tecnologia,199.99,25
+3,Polo,Ropa,89.99,50
+4,Libro,Educacion,45,30
+5,Celular,Tecnologia,1599.99,8
+6,Mochila,Ropa,79.99,20
+7,Monitor,Tecnologia,899.99,12
